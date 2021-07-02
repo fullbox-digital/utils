@@ -1,3 +1,3 @@
-export abstract class Controller<Req, Res> {
-  abstract handle (request: Req): Promise<Res>
+export interface Controller<Req, Res> {
+  handle: (request: Req) => Promise<Res>
 }

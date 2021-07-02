@@ -5,3 +5,5 @@ export * from './domain/EventStore'
 export * from './domain/EventSubscription'
 export * from './domain/IdRequiredError'
 export * from './domain/UniqueEntityId'
+
+export * from './use-cases/Controller'

@@ -5,7 +5,7 @@ import { UniqueEntityId } from './UniqueEntityId'
 
 export interface RegisterSubscriptionProps {
   domainEventName: string
-  subscription: EventSubscription<unknown>
+  subscription: EventSubscription<any>
 }
 
 export abstract class EventStore {
