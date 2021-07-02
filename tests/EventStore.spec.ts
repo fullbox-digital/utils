@@ -1,4 +1,4 @@
-import { EventStore } from '../../src'
+import { EventStore } from '../src'
 import {
   CoffeeFinished,
   CoffeeMachine,
