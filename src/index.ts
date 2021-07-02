@@ -10,5 +10,6 @@ export * from './use-cases/Controller'
 export * from './use-cases/BodyError'
 export * from './use-cases/CreatedBody'
 export * from './use-cases/HttpResponse'
+export * from './use-cases/HttpStatus'
 
 export * from './helper/ArrayHelper'
