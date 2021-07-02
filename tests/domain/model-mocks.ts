@@ -1,4 +1,4 @@
-import { AggregateRoot, DomainEvent, EventSubscription, UniqueEntityId } from '../src'
+import { AggregateRoot, DomainEvent, EventSubscription, UniqueEntityId } from '../../src'
 
 export class CoffeeFinished implements DomainEvent {
   dateTimeOccurred: Date

@@ -1,4 +1,4 @@
-import { ArrayHelper } from '../src/helper/ArrayHelper'
+import { ArrayHelper } from '../../src/helper/ArrayHelper'
 
 describe(ArrayHelper, () => {
   test('should select random value from array', async () => {

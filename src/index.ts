@@ -7,3 +7,5 @@ export * from './domain/IdRequiredError'
 export * from './domain/UniqueEntityId'
 
 export * from './use-cases/Controller'
+
+export * from './helper/ArrayHelper'
