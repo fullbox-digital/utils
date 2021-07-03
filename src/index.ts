@@ -7,6 +7,7 @@ export * from './domain/IdRequiredError'
 export * from './domain/UniqueEntityId'
 export * from './domain/Exception'
 export * from './domain/BusinessError'
+export * from './domain/ValueObject'
 
 export * from './use-cases/Controller'
 export * from './use-cases/BodyError'
