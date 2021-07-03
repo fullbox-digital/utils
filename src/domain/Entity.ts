@@ -1,9 +1,13 @@
 import { UniqueEntityId } from './UniqueEntityId'
 import { v4 as uuid } from 'uuid'
 
+const isEntity = (v: any): v is Entity<any> => {
+  return v instanceof Entity
+}
+
 export class Entity<T> {
-  protected props: T
-  protected id: UniqueEntityId
+  protected readonly props: T
+  protected readonly id: UniqueEntityId
 
   constructor (props: T, id?: UniqueEntityId) {
     this.props = props
@@ -13,4 +17,11 @@ export class Entity<T> {
   getId (): UniqueEntityId { return this.id }
 
   getProps (): T { return this.props }
+
+  equals (entity?: Entity<T>): boolean {
+    if (entity === null || entity === undefined) { return false }
+    if (this === entity) { return true }
+    if (!isEntity(entity)) { return false }
+    return this.id.equals(entity.id)
+  }
 }
