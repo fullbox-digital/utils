@@ -10,7 +10,7 @@ export * from './domain/BusinessError'
 export * from './domain/ValueObject'
 
 export * from './use-cases/Controller'
-export * from './use-cases/BodyError'
+export * from './use-cases/ErrorMessage'
 export * from './use-cases/CreatedBody'
 export * from './use-cases/HttpResponse'
 export * from './use-cases/HttpStatus'

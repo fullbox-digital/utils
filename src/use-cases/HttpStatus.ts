@@ -1,43 +1,38 @@
 import { BusinessError } from '../domain/BusinessError'
-import { Left } from '../railway/Either'
-import { BodyError } from './BodyError'
+import { ErrorMessage } from './ErrorMessage'
 import { CreatedBody } from './CreatedBody'
 import { HttpResponse } from './HttpResponse'
 
+const bodyError = (status: number, errors: Error[]): HttpResponse<ErrorMessage[]> => ({
+  status,
+  body: errors.map(err => ({ message: err.message }))
+})
+
 export abstract class HttpStatus {
   static ok = <T = never>(body?: T): HttpResponse<T> => ({ status: 200, body })
-  static noContent = (): HttpResponse<BodyError> => ({ status: 204 })
+  static noContent = (): HttpResponse<never> => ({ status: 204 })
   static created = (body: CreatedBody): HttpResponse<CreatedBody> => ({ status: 201, body })
 
-  static badRequest = (body: BodyError): HttpResponse<BodyError> => ({ status: 400, body })
-  static unauthorized = (body: BodyError): HttpResponse<BodyError> => ({ status: 401, body })
-  static paymentRequired = (body: BodyError): HttpResponse<BodyError> => ({ status: 402, body })
-  static forbidden = (body: BodyError): HttpResponse<BodyError> => ({ status: 403, body })
-  static notFound = (body: BodyError): HttpResponse<BodyError> => ({ status: 404, body })
-  static iamATeapot = (body: BodyError): HttpResponse<BodyError> => ({ status: 418, body })
-  static unprocessableEntity = (body: BodyError): HttpResponse<BodyError> => ({ status: 422, body })
+  static badRequest = (...errors: Error[]): HttpResponse<ErrorMessage[]> => bodyError(400, errors)
+  static unauthorized = (...errors: Error[]): HttpResponse<ErrorMessage[]> => bodyError(401, errors)
+  static paymentRequired = (...errors: Error[]): HttpResponse<ErrorMessage[]> =>
+    bodyError(402, errors)
 
-  static serverError = (body: BodyError): HttpResponse<BodyError> => ({ status: 500, body })
-  static serviceUnavailable = (body: BodyError): HttpResponse<BodyError> => ({ status: 503, body })
+  static forbidden = (...errors: Error[]): HttpResponse<ErrorMessage[]> => bodyError(403, errors)
+  static notFound = (...errors: Error[]): HttpResponse<ErrorMessage[]> => bodyError(404, errors)
+  static iamATeapot = (...errors: Error[]): HttpResponse<ErrorMessage[]> => bodyError(418, errors)
+  static unprocessableEntity = (...errors: Error[]): HttpResponse<ErrorMessage[]> =>
+    bodyError(422, errors)
 
-  static errorsFromLeft = (left: Left<Error | Error[], unknown>): HttpResponse<BodyError> => {
-    const errors: Error[] = []
+  static serverError = (...errors: Error[]): HttpResponse<ErrorMessage[]> => bodyError(500, errors)
+  static serviceUnavailable = (...errors: Error[]): HttpResponse<ErrorMessage[]> =>
+    bodyError(503, errors)
 
-    const leftValue = left.getValue()
-    if (Array.isArray(leftValue)) {
-      errors.push(...leftValue)
-    } else {
-      errors.push(leftValue)
-    }
-
-    const errorsMessages: BodyError = {
-      errors: errors.map(error => ({ message: error.message }))
-    }
-
+  static getResponseFromErrors = (errors: Error[]): HttpResponse<ErrorMessage[]> => {
     const isUnprocessableEntity = errors.some(error => error instanceof BusinessError)
     if (isUnprocessableEntity) {
-      return HttpStatus.unprocessableEntity(errorsMessages)
+      return HttpStatus.unprocessableEntity(...errors)
     }
-    return HttpStatus.serverError(errorsMessages)
+    return HttpStatus.serverError(...errors)
   }
 }
