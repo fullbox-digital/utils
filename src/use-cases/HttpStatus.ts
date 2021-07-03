@@ -1,3 +1,6 @@
+import { BusinessError } from '../domain/BusinessError'
+import { Exception } from '../domain/Exception'
+import { Either } from '../railway/Either'
 import { BodyError } from './BodyError'
 import { CreatedBody } from './CreatedBody'
 import { HttpResponse } from './HttpResponse'
@@ -17,4 +20,13 @@ export abstract class HttpStatus {
 
   static serverError = (body: BodyError): HttpResponse<BodyError> => ({ status: 500, body })
   static serviceUnavailable = (body: BodyError): HttpResponse<BodyError> => ({ status: 503, body })
+
+  static errorFromEither = (result: Either<Error, unknown>): HttpResponse<BodyError> => {
+    if (result.isRight()) { throw new Exception('The Either need is left') }
+    const error = result.getValue()
+    if (error instanceof BusinessError) {
+      return HttpStatus.unprocessableEntity({ errors: [{ message: error.message }] })
+    }
+    return HttpStatus.serverError({ errors: [{ message: error.message }] })
+  }
 }

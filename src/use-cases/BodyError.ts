@@ -1,4 +1,5 @@
 export interface BodyError {
-  errorMessage: string
-  errorName?: string
+  errors: Array<{
+    message: string
+  }>
 }
