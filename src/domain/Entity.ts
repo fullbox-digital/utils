@@ -1,5 +1,4 @@
 import { UniqueEntityId } from './UniqueEntityId'
-import { v4 as uuid } from 'uuid'
 
 const isEntity = (v: any): v is Entity<any> => {
   return v instanceof Entity
@@ -11,7 +10,7 @@ export class Entity<T> {
 
   constructor (props: T, id?: UniqueEntityId) {
     this.props = props
-    this.id = id ?? new UniqueEntityId(uuid())
+    this.id = id ?? UniqueEntityId.create()
   }
 
   getId (): UniqueEntityId { return this.id }

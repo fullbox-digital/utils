@@ -10,8 +10,6 @@ export class UniqueEntityId {
     this.id = id
   }
 
-  createId (): string { return uuid() }
-
   toString (): string { return this.id }
 
   equals (id?: UniqueEntityId): boolean {
@@ -19,4 +17,6 @@ export class UniqueEntityId {
     if (!(id instanceof this.constructor)) { return false }
     return id.toString() === this.id.toString()
   }
+
+  static create (): UniqueEntityId { return new UniqueEntityId(uuid()) }
 }
