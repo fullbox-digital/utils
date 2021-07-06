@@ -1,4 +1,4 @@
-import { AggregateRoot, DomainEvent, EventSubscription, UniqueEntityId } from '../../src'
+import { AggregateRoot, DomainEvent, EventSubscription } from '../../src'
 
 export class CoffeeFinished implements DomainEvent {
   dateTimeOccurred: Date
@@ -9,7 +9,7 @@ export class CoffeeFinished implements DomainEvent {
     this.dateTimeOccurred = new Date()
   }
 
-  getAggregateId (): UniqueEntityId {
+  getAggregateId (): string {
     return this.coffeeMachine.getId()
   }
 }
@@ -23,7 +23,7 @@ export class CoffeeMachineDefectFound implements DomainEvent {
     this.dateTimeOccurred = new Date()
   }
 
-  getAggregateId (): UniqueEntityId {
+  getAggregateId (): string {
     return this.coffeeMachine.getId()
   }
 }
