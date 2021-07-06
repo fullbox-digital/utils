@@ -13,7 +13,7 @@ export class Entity<T> {
     this.id = id ?? UniqueEntityId.create()
   }
 
-  getId (): UniqueEntityId { return this.id }
+  getId (): string { return this.id.toString() }
 
   getProps (): T { return this.props }
 
