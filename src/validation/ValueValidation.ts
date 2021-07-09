@@ -2,6 +2,13 @@ import { ObjectHelper } from '..'
 import { Validation } from './Validation'
 import { ValidationError } from './ValidationError'
 
+type TypeOf = 'string' | 'number' | 'boolean'
+
+const typeOfName = new Map<TypeOf, string>([
+  ['string', 'texto'],
+  ['number', 'numérico'],
+  ['boolean', 'booleano']
+])
 export class ValueValidation extends Validation {
   constructor (
     private readonly value: any,
@@ -79,6 +86,14 @@ export class ValueValidation extends Validation {
     return this
   }
 
+  type (typeOf: TypeOf): ValueValidation {
+    if (typeof this.value !== typeOf) {
+      this.errors
+        .push(new ValidationError(`${this.field} ${ValueValidation.typeErrorMessage(typeOf)}`))
+    }
+    return this
+  }
+
   static lengthErrorMessage = (min: number, max: number): string =>
     `precisa ser maior ou igual a ${min} e menor ou igual a ${max}!`
 
@@ -87,4 +102,7 @@ export class ValueValidation extends Validation {
   static emailErrorMessage = (email: string): string => `${email} não é válido!`
 
   static isNaNErrorMessage = (): string => 'não é um número!'
+
+  static typeErrorMessage = (typeOf: TypeOf): string =>
+    `deve ser do tipo ${typeOfName.get(typeOf) ?? ''}`
 }
