@@ -8,6 +8,7 @@ export * from './domain/ValueObject'
 
 export * from './errors/BusinessError'
 export * from './errors/IdRequiredError'
+export * from './errors/NotFoundError'
 
 export * from './use-cases/Controller'
 export * from './use-cases/ErrorBody'
