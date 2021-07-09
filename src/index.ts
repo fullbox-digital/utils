@@ -3,10 +3,11 @@ export * from './domain/DomainEvent'
 export * from './domain/Entity'
 export * from './domain/EventStore'
 export * from './domain/EventSubscription'
-export * from './domain/IdRequiredError'
 export * from './domain/UniqueEntityId'
-export * from './domain/BusinessError'
 export * from './domain/ValueObject'
+
+export * from './errors/BusinessError'
+export * from './errors/IdRequiredError'
 
 export * from './use-cases/Controller'
 export * from './use-cases/ErrorBody'

@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid'
-import { IdRequiredError } from './IdRequiredError'
+
+import { IdRequiredError } from '..'
 
 export class UniqueEntityId {
   private readonly id: string
