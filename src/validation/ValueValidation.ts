@@ -80,16 +80,21 @@ export class ValueValidation extends Validation {
   }
 
   number (): ValueValidation {
-    if (isNaN(this.value)) {
-      this.errors.push(new ValidationError(`${this.field} ${ValueValidation.isNaNErrorMessage()}`))
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (isNaN(this.value)) {
+        this.errors
+          .push(new ValidationError(`${this.field} ${ValueValidation.isNaNErrorMessage()}`))
+      }
     }
     return this
   }
 
   type (typeOf: TypeOf): ValueValidation {
-    if (typeof this.value !== typeOf) {
-      this.errors
-        .push(new ValidationError(`${this.field} ${ValueValidation.typeErrorMessage(typeOf)}`))
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (typeof this.value !== typeOf) {
+        this.errors
+          .push(new ValidationError(`${this.field} ${ValueValidation.typeErrorMessage(typeOf)}`))
+      }
     }
     return this
   }
