@@ -17,5 +17,9 @@ export * from './use-cases/HttpResponse'
 export * from './use-cases/HttpStatus'
 
 export * from './helper/ArrayHelper'
+export * from './helper/ObjectHelper'
+export * from './helper/TextHelper'
+export * from './helper/HashingHelper'
+export * from './helper/JwtHelper'
 
 export * from './railway/Either'
