@@ -9,6 +9,7 @@ const typeOfName = new Map<TypeOf, string>([
   ['number', 'numérico'],
   ['boolean', 'booleano']
 ])
+
 export class ValueValidation extends Validation {
   constructor (
     private readonly value: any,
@@ -21,6 +22,7 @@ export class ValueValidation extends Validation {
         `${this.field} ${ValueValidation.requiredErrorMessage()}`
       ))
     }
+
     return this
   }
 
@@ -30,6 +32,7 @@ export class ValueValidation extends Validation {
         `${this.field} ${ValueValidation.requiredErrorMessage()}`
       ))
     }
+
     return this
   }
 
@@ -47,6 +50,7 @@ export class ValueValidation extends Validation {
         ))
       }
     }
+
     return this
   }
 
@@ -65,6 +69,7 @@ export class ValueValidation extends Validation {
         ))
       }
     }
+
     return this
   }
 
@@ -86,6 +91,7 @@ export class ValueValidation extends Validation {
           .push(new ValidationError(`${this.field} ${ValueValidation.isNaNErrorMessage()}`))
       }
     }
+
     return this
   }
 
@@ -96,6 +102,7 @@ export class ValueValidation extends Validation {
           .push(new ValidationError(`${this.field} ${ValueValidation.typeErrorMessage(typeOf)}`))
       }
     }
+
     return this
   }
 
@@ -109,5 +116,5 @@ export class ValueValidation extends Validation {
   static isNaNErrorMessage = (): string => 'não é um número!'
 
   static typeErrorMessage = (typeOf: TypeOf): string =>
-    `deve ser do tipo ${typeOfName.get(typeOf) ?? ''}`
+    `deve ser do tipo ${typeOfName.get(typeOf) ?? ''}!`
 }
