@@ -1,4 +1,4 @@
-import { BusinessError } from '../domain/BusinessError'
+import { BusinessError } from '..'
 import { ErrorBody } from './ErrorBody'
 import { CreatedBody } from './CreatedBody'
 import { HttpResponse } from './HttpResponse'
