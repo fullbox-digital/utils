@@ -7,6 +7,7 @@
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-extraneous-class": "off",
     "@typescript-eslint/method-signature-style": "off",
+    "valid-typeof": "off",
     "max-len": ["error", { "code": 100, "ignoreComments": true }],
     "no-console": "warn"
   }
