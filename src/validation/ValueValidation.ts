@@ -72,10 +72,19 @@ export class ValueValidation extends Validation {
     return this
   }
 
+  number (): ValueValidation {
+    if (isNaN(this.value)) {
+      this.errors.push(new ValidationError(`${this.field} ${ValueValidation.isNaNErrorMessage()}`))
+    }
+    return this
+  }
+
   static lengthErrorMessage = (min: number, max: number): string =>
     `precisa ser maior ou igual a ${min} e menor ou igual a ${max}!`
 
   static requiredErrorMessage = (): string => 'é obrigatório!'
 
   static emailErrorMessage = (email: string): string => `${email} não é válido!`
+
+  static isNaNErrorMessage = (): string => 'não é um número!'
 }
