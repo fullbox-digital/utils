@@ -1,4 +1,5 @@
 export interface Action {
+  name: string
   path: string
   method: 'post' | 'put' | 'delete' | 'get'
 }
