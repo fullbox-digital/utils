@@ -1,6 +1,6 @@
 import { ActionList } from './Action'
 
-export interface List<T, S = never> {
+export interface List<T, S = object> {
   items: Array<ActionList<T>>
-  summary: S & { total: number }
+  summary: { total: number } & S
 }
