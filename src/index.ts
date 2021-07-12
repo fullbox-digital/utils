@@ -6,6 +6,8 @@ export * from './domain/EventSubscription'
 export * from './domain/UniqueEntityId'
 export * from './domain/ValueObject'
 export * from './domain/UnitOfWork'
+export * from './domain/Action'
+export * from './domain/List'
 
 export * from './errors/BusinessError'
 export * from './errors/IdRequiredError'
