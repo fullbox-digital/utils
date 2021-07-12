@@ -5,6 +5,7 @@ export * from './domain/EventStore'
 export * from './domain/EventSubscription'
 export * from './domain/UniqueEntityId'
 export * from './domain/ValueObject'
+export * from './domain/UnitOfWork'
 
 export * from './errors/BusinessError'
 export * from './errors/IdRequiredError'

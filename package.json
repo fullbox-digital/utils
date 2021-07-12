@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/faker": "^5.5.7",
