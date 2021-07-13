@@ -2,12 +2,13 @@ import { ObjectHelper } from '..'
 import { Validation } from './Validation'
 import { ValidationError } from './ValidationError'
 
-type TypeOf = 'string' | 'number' | 'boolean'
+  type TypeOf = 'string' | 'number' | 'boolean' | 'array'
 
 const typeOfName = new Map<TypeOf, string>([
   ['string', 'texto'],
   ['number', 'numérico'],
-  ['boolean', 'booleano']
+  ['boolean', 'booleano'],
+  ['array', 'lista']
 ])
 
 export class ValueValidation extends Validation {
@@ -97,12 +98,29 @@ export class ValueValidation extends Validation {
 
   type (typeOf: TypeOf): ValueValidation {
     if (!ObjectHelper.isNullOrUndefined(this.value)) {
-      if (typeof this.value !== typeOf) {
+      if (typeOf === 'array') {
+        if (!Array.isArray(this.value)) {
+          this.errors.push(
+            new ValidationError(`${this.field} ${ValueValidation.typeErrorMessage(typeOf)}`)
+          )
+        }
+      } else if (typeof this.value !== typeOf) {
         this.errors
           .push(new ValidationError(`${this.field} ${ValueValidation.typeErrorMessage(typeOf)}`))
       }
     }
 
+    return this
+  }
+
+  filled (): ValueValidation {
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (Array.isArray(this.value) && this.value.length <= 0) {
+        this.errors.push(new ValidationError(
+          `${this.field} ${ValueValidation.filledErrorMessage()}`)
+        )
+      }
+    }
     return this
   }
 
@@ -117,4 +135,6 @@ export class ValueValidation extends Validation {
 
   static typeErrorMessage = (typeOf: TypeOf): string =>
     `deve ser do tipo ${typeOfName.get(typeOf) ?? ''}!`
+
+  static filledErrorMessage = (): string => 'não está prenchido!'
 }
