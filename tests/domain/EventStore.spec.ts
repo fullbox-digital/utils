@@ -43,24 +43,25 @@ describe(EventStore, () => {
     expect(events[0].getAggregateId()).toBe(coffeeMachine.getId())
   })
 
-  test('should call occurred in subscriptions if dispatchEventsForAggregate is called', () => {
-    const {
-      coffeeMachine,
-      warnAfterCoffeeMachineDefectFound,
-      sendSmsAfterDeliciousCoffeeFinished
-    } = makeSut()
+  test('should call occurred in subscriptions if dispatchEventsForAggregate is called',
+    async () => {
+      const {
+        coffeeMachine,
+        warnAfterCoffeeMachineDefectFound,
+        sendSmsAfterDeliciousCoffeeFinished
+      } = makeSut()
 
-    coffeeMachine.finish()
-    coffeeMachine.defectFound()
+      coffeeMachine.finish()
+      coffeeMachine.defectFound()
 
-    const events = [...coffeeMachine.getDomainEvents()]
+      const events = [...coffeeMachine.getDomainEvents()]
 
-    const sendSmsOccurredSpy = jest.spyOn(sendSmsAfterDeliciousCoffeeFinished, 'occurred')
-    const warnOccurredSpy = jest.spyOn(warnAfterCoffeeMachineDefectFound, 'occurred')
+      const sendSmsOccurredSpy = jest.spyOn(sendSmsAfterDeliciousCoffeeFinished, 'occurred')
+      const warnOccurredSpy = jest.spyOn(warnAfterCoffeeMachineDefectFound, 'occurred')
 
-    EventStore.dispatchEventsForAggregate(coffeeMachine.getId())
+      await EventStore.dispatchEventsForAggregate(coffeeMachine.getId())
 
-    expect(sendSmsOccurredSpy).toHaveBeenCalledWith(events[0])
-    expect(warnOccurredSpy).toHaveBeenCalledWith(events[1])
-  })
+      expect(sendSmsOccurredSpy).toHaveBeenCalledWith(events[0])
+      expect(warnOccurredSpy).toHaveBeenCalledWith(events[1])
+    })
 })

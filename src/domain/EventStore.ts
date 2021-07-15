@@ -19,11 +19,13 @@ export abstract class EventStore {
     }
   }
 
-  static dispatchEventsForAggregate (id: string): void {
+  static async dispatchEventsForAggregate (id: string): Promise<void> {
     const aggregate = EventStore.markedAggregates.get(id)
     if (aggregate) {
       const domainEvents = aggregate.getDomainEvents()
-      domainEvents.forEach(EventStore.dispatchEvent)
+      for (const domainEvent of domainEvents) {
+        await EventStore.dispatchEvent(domainEvent)
+      }
       aggregate.clearEvents()
       EventStore.markedAggregates.delete(id)
     }
@@ -37,12 +39,12 @@ export abstract class EventStore {
     EventStore.subscriptionsMap.set(domainEventName, subscriptions)
   }
 
-  private static dispatchEvent (event: DomainEvent): void {
+  private static async dispatchEvent (event: DomainEvent): Promise<void> {
     const domainEventName = event.constructor.name
     const subscriptions = EventStore.subscriptionsMap.get(domainEventName)
     if (subscriptions) {
       for (const subscription of subscriptions) {
-        subscription.occurred(event)
+        await subscription.occurred(event)
       }
     }
   }

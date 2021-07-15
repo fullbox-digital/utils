@@ -46,14 +46,14 @@ export class CoffeeMachine extends AggregateRoot<CoffeeMachineProps> {
 }
 
 export class SendSmsAfterCoffeeFinished implements EventSubscription<CoffeeFinished> {
-  occurred (domainEvent: CoffeeFinished): void {
+  async occurred (domainEvent: CoffeeFinished): Promise<void> {
     // Send SMS
   }
 }
 
 export class WarnAfterCoffeeMachineDefectFound
 implements EventSubscription<CoffeeMachineDefectFound> {
-  occurred (domainEvent: CoffeeMachineDefectFound): void {
+  async occurred (domainEvent: CoffeeMachineDefectFound): Promise<void> {
     // Warn
   }
 }

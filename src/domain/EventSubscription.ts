@@ -1,3 +1,3 @@
 export interface EventSubscription<T> {
-  occurred(domainEvent: T): void
+  occurred(domainEvent: T): Promise<void>
 }
