@@ -125,19 +125,19 @@ export class ValueValidation extends Validation {
   }
 
   greaterThan (number: number): ValueValidation {
-    if (ObjectHelper.isNullOrUndefined(this.value)) {
-      if (Number(this.value) > number) {
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (!(Number(this.value) > number)) {
         this.errors.push(new ValidationError(
           `${this.field} ${ValueValidation.greaterThan(number)}`
         ))
       }
     }
     return this
-  } 
+  }
 
   greaterEqualThan (number: number): ValueValidation {
-    if (ObjectHelper.isNullOrUndefined(this.value)) {
-      if (Number(this.value) >= number) {
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (!(Number(this.value) >= number)) {
         this.errors.push(new ValidationError(
           `${this.field} ${ValueValidation.greaterEqualThan(number)}`
         ))
@@ -147,8 +147,8 @@ export class ValueValidation extends Validation {
   }
 
   lessThan (number: number): ValueValidation {
-    if (ObjectHelper.isNullOrUndefined(this.value)) {
-      if (Number(this.value) < number) {
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (!(Number(this.value) < number)) {
         this.errors.push(new ValidationError(
           `${this.field} ${ValueValidation.lessThan(number)}`
         ))
@@ -158,8 +158,8 @@ export class ValueValidation extends Validation {
   }
 
   lessEqualThan (number: number): ValueValidation {
-    if (ObjectHelper.isNullOrUndefined(this.value)) {
-      if (Number(this.value) <= number) {
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (!(Number(this.value) <= number)) {
         this.errors.push(new ValidationError(
           `${this.field} ${ValueValidation.lessEqualThan(number)}`
         ))
@@ -167,7 +167,6 @@ export class ValueValidation extends Validation {
     }
     return this
   }
-
 
   static lengthErrorMessage = (min: number, max: number): string =>
     `precisa ser maior ou igual a ${min} e menor ou igual a ${max}!`
@@ -183,12 +182,11 @@ export class ValueValidation extends Validation {
 
   static filledErrorMessage = (): string => 'não está preenchido!'
 
-  static greaterThan = (number: number): string => `precisa ser maior que ${number}`
+  static greaterThan = (number: number): string => `precisa ser maior que ${number}!`
 
-  static greaterEqualThan = (number: number): string => `precisa ser maior ou igual a ${number}`
+  static greaterEqualThan = (number: number): string => `precisa ser maior ou igual a ${number}!`
 
-  static lessThan = (number: number): string => `precisa ser menor que ${number}`
+  static lessThan = (number: number): string => `precisa ser menor que ${number}!`
 
-  static lessEqualThan = (number: number): string => `precisa ser menor igual a ${number}`
-
+  static lessEqualThan = (number: number): string => `precisa ser menor igual a ${number}!`
 }
