@@ -11,7 +11,7 @@
     "clean": "del ./build/*",
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "pub": "npm version patch && npm run build && npm publish",
-    "test": "jest"
+    "test": "jest --watch --no-cache"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/faker": "^5.5.7",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^26.0.24",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/node": "^15.14.0",
     "@types/uuid": "^8.3.0",
