@@ -124,6 +124,51 @@ export class ValueValidation extends Validation {
     return this
   }
 
+  greaterThan (number: number): ValueValidation {
+    if (ObjectHelper.isNullOrUndefined(this.value)) {
+      if (Number(this.value) > number) {
+        this.errors.push(new ValidationError(
+          `${this.field} ${ValueValidation.greaterThan(number)}`
+        ))
+      }
+    }
+    return this
+  } 
+
+  greaterEqualThan (number: number): ValueValidation {
+    if (ObjectHelper.isNullOrUndefined(this.value)) {
+      if (Number(this.value) >= number) {
+        this.errors.push(new ValidationError(
+          `${this.field} ${ValueValidation.greaterEqualThan(number)}`
+        ))
+      }
+    }
+    return this
+  }
+
+  lessThan (number: number): ValueValidation {
+    if (ObjectHelper.isNullOrUndefined(this.value)) {
+      if (Number(this.value) < number) {
+        this.errors.push(new ValidationError(
+          `${this.field} ${ValueValidation.lessThan(number)}`
+        ))
+      }
+    }
+    return this
+  }
+
+  lessEqualThan (number: number): ValueValidation {
+    if (ObjectHelper.isNullOrUndefined(this.value)) {
+      if (Number(this.value) <= number) {
+        this.errors.push(new ValidationError(
+          `${this.field} ${ValueValidation.lessEqualThan(number)}`
+        ))
+      }
+    }
+    return this
+  }
+
+
   static lengthErrorMessage = (min: number, max: number): string =>
     `precisa ser maior ou igual a ${min} e menor ou igual a ${max}!`
 
@@ -136,5 +181,14 @@ export class ValueValidation extends Validation {
   static typeErrorMessage = (typeOf: TypeOf): string =>
     `deve ser do tipo ${typeOfName.get(typeOf) ?? ''}!`
 
-  static filledErrorMessage = (): string => 'não está prenchido!'
+  static filledErrorMessage = (): string => 'não está preenchido!'
+
+  static greaterThan = (number: number): string => `precisa ser maior que ${number}`
+
+  static greaterEqualThan = (number: number): string => `precisa ser maior ou igual a ${number}`
+
+  static lessThan = (number: number): string => `precisa ser menor que ${number}`
+
+  static lessEqualThan = (number: number): string => `precisa ser menor igual a ${number}`
+
 }
