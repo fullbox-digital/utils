@@ -10,6 +10,7 @@ export * from './domain/Identifier'
 export * from './domain/Action'
 export * from './domain/List'
 export * from './domain/SelectList'
+export * from './domain/Navigation'
 
 export * from './errors/BusinessError'
 export * from './errors/IdRequiredError'
