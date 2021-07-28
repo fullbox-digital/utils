@@ -14,6 +14,7 @@ export * from './domain/Navigation'
 
 export * from './errors/BusinessError'
 export * from './errors/IdRequiredError'
+export * from './errors/IdInvalidError'
 export * from './errors/NotFoundError'
 
 export * from './use-cases/Controller'
