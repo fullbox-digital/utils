@@ -9,7 +9,7 @@ export abstract class TextHelper {
   }
 
   static justNumber (value: string): string {
-    return value?.match(/\d+/g)?.join('') ?? ''
+    return value?.toString()?.match(/\d+/g)?.join('') ?? ''
   }
 
   static fillLeftSide (value: string, width: number, valueToFill: string): string {
