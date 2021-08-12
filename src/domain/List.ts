@@ -1,9 +1,10 @@
 import { ActionList } from './Action'
+import { FindFieldData } from './FindFieldData';
 import { NavigationList } from './Navigation';
-import { FindFieldDataList } from './FindFieldData';
 
 export interface List<T, H, S = object> {
   header: H
-  items: Array<ActionList<NavigationList<FindFieldDataList<T>>>>
+  items: Array<ActionList<NavigationList<T>>>
   summary: { total: number } & S
+  findFieldData?: FindFieldData[]
 }
