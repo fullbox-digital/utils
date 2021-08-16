@@ -7,23 +7,23 @@ type RequestParams<Data, DataName extends InputType> = Pick<Record<InputType, Da
   path: string
 }
 
-interface SuccessfulResponse<T> {
+interface Successful<T> {
   status: number
   data: T
 }
 
-interface UnsuccessfulResponse<T> {
+interface Unsuccessful<T> {
   status: number
   data?: T
 }
 
 export interface HttpClient {
   request<
-    Response = any,
-    SuccessfulData = unknown,
-    UnsuccessfulData = unknown,
+    SuccessfulResponse = any,
+    UnsuccessfulResponse = unknown,
+    InputData = unknown,
     DataName extends InputType = any
   >(
-    params: RequestParams<SuccessfulData, DataName>
-  ): Promise<Either<UnsuccessfulResponse<UnsuccessfulData>, SuccessfulResponse<Response>>>
+    params: RequestParams<InputData, DataName>
+  ): Promise<Either<Unsuccessful<UnsuccessfulResponse>, Successful<SuccessfulResponse>>>
 }
