@@ -1,25 +1,29 @@
 import { Either } from '../railway/Either'
 
-type Info = 'query' | 'body'
+type InputType = 'query' | 'body' | never
 
-type RequestParams<Data, DataName extends Info> = Pick<Record<Info, Data>, DataName> & {
+type RequestParams<Data, DataName extends InputType> = Pick<Record<InputType, Data>, DataName> & {
   method: 'get' | 'delete' | 'post' | 'put'
+  path: string
 }
 
-interface SuccessfulResponse<Data = unknown> {
+interface SuccessfulResponse<T> {
   status: number
-  data: Data
+  data: T
 }
 
-interface UnsuccessfulResponse {
+interface UnsuccessfulResponse<T> {
   status: number
-  data?: Array<{
-    message?: string
-  }>
+  data?: T
 }
 
 export interface HttpClient {
-  request<Response = any, Data = unknown, DataName extends Info | never = any>(
-    params: RequestParams<Data, DataName>
-  ): Promise<Either<UnsuccessfulResponse, SuccessfulResponse<Response>>>
+  request<
+    Response = any,
+    SuccessfulData = unknown,
+    UnsuccessfulData = unknown,
+    DataName extends InputType = any
+  >(
+    params: RequestParams<SuccessfulData, DataName>
+  ): Promise<Either<UnsuccessfulResponse<UnsuccessfulData>, SuccessfulResponse<Response>>>
 }
