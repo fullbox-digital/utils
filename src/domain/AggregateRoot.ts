@@ -1,12 +1,18 @@
 import { DomainEvent } from './DomainEvent'
 import { EventStore } from './EventStore'
 import { Entity } from './Entity'
+import { UniqueEntityId } from './UniqueEntityId'
 
 type Events<T> = Array<{ date: number } & T>
 
 export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
   private readonly domainEvents: DomainEvent[] = []
   private readonly events: Events<E> = []
+
+  constructor(props: T, id?: UniqueEntityId, events?: Events<E>) {
+    super(props, id)
+    this.events = events ?? []
+  }
 
   getDomainEvents (): DomainEvent[] {
     return this.domainEvents
