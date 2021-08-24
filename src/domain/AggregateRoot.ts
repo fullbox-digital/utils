@@ -3,13 +3,13 @@ import { EventStore } from './EventStore'
 import { Entity } from './Entity'
 import { UniqueEntityId } from './UniqueEntityId'
 
-type Events<T> = Array<{ date: number } & T>
+export type Events<T> = Array<{ date: number } & T>
 
 export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
   private readonly domainEvents: DomainEvent[] = []
   private readonly events: Events<E> = []
 
-  constructor(props: T, id?: UniqueEntityId, events?: Events<E>) {
+  constructor (props: T, id?: UniqueEntityId, events?: Events<E>) {
     super(props, id)
     this.events = events ?? []
   }
@@ -33,5 +33,5 @@ export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
     this.domainEvents.splice(0, this.domainEvents.length)
   }
 
-  getEvents (): E[] { return this.events }
+  getEvents (): Events<E> { return this.events }
 }
