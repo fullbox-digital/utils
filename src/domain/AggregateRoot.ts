@@ -3,27 +3,27 @@ import { EventStore } from './EventStore'
 import { Entity } from './Entity'
 import { UniqueEntityId } from './UniqueEntityId'
 
-export type Events<T> = Array<{ date: number } & T>
+export type Logs<T> = Array<{ date: number } & T>
 
 export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
   private readonly domainEvents: DomainEvent[] = []
-  private readonly events: Events<E> = []
+  private readonly logs: Logs<E> = []
 
-  constructor (props: T, id?: UniqueEntityId, events?: Events<E>) {
+  constructor (props: T, id?: UniqueEntityId, logs?: Logs<E>) {
     super(props, id)
-    this.events = events ?? []
+    this.logs = logs ?? []
   }
 
   getDomainEvents (): DomainEvent[] {
     return this.domainEvents
   }
 
-  protected addDomainEvent (domainEvent: DomainEvent, event?: E): void {
+  protected addDomainEvent (domainEvent: DomainEvent, log?: E): void {
     this.domainEvents.push(domainEvent)
-    if (event) {
-      this.events.push({
+    if (log) {
+      this.logs.push({
         date: domainEvent.dateTimeOccurred.getTime(),
-        ...event
+        ...log
       })
     }
     EventStore.markAggregateForDispatch(this)
@@ -33,5 +33,5 @@ export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
     this.domainEvents.splice(0, this.domainEvents.length)
   }
 
-  getEvents (): Events<E> { return this.events }
+  getLogs (): Logs<E> { return this.logs }
 }
