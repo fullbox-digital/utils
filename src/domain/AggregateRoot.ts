@@ -34,4 +34,18 @@ export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
   }
 
   getLogs (): Logs<E> { return this.logs }
+
+  protected update<R> (
+    create: (props: T, id: UniqueEntityId, logs: Logs<any>) => R,
+    params: Partial<T>
+  ): R {
+    return create(
+      {
+        ...this.props,
+        ...params
+      },
+      this.id,
+      this.getLogs()
+    )
+  }
 }
