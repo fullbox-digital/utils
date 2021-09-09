@@ -40,7 +40,6 @@ describe(EventStore, () => {
     const events = coffeeMachine.getDomainEvents()
     expect(events.length).toBe(1)
     expect(events[0].dateTimeOccurred).toBeTruthy()
-    expect(events[0].getAggregateId()).toBe(coffeeMachine.getId())
   })
 
   test('should call occurred in subscriptions if dispatchEventsForAggregate is called',
