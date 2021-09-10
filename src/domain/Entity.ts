@@ -23,4 +23,17 @@ export class Entity<T> {
     if (!isEntity(entity)) { return false }
     return this.id.equals(entity.id)
   }
+
+  protected update<R> (
+    create: (props: T, id: UniqueEntityId) => R,
+    params: Partial<T>
+  ): R {
+    return create(
+      {
+        ...this.props,
+        ...params
+      },
+      this.id
+    )
+  }
 }
