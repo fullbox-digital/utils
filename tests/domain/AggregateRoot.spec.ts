@@ -1,4 +1,4 @@
-import { AggregateRoot, Either, right, UniqueEntityId, ValidationError } from '../../src'
+import { AggregateRoot, Either, Logs, right, UniqueEntityId, ValidationError } from '../../src'
 
 interface PersonProps {
   name: string
@@ -6,8 +6,10 @@ interface PersonProps {
 }
 
 class Person extends AggregateRoot<PersonProps> {
-  static create (props: PersonProps, id?: UniqueEntityId): Either<ValidationError[], Person> {
-    return right(new Person(props, id))
+  static create (
+    props: PersonProps, id?: UniqueEntityId, logs?: Logs<any>
+  ): Either<ValidationError[], Person> {
+    return right(new Person(props, id, logs))
   }
 
   changeName (name: string): Either<ValidationError[], Person> {
@@ -34,6 +36,7 @@ describe(AggregateRoot, () => {
 
     expect(newPerson.getName()).toBe('Adolfo')
     expect(newPerson.getAge()).toBe(281)
+    expect(newPerson.getId()).toBe(person.getId())
   })
 
   it('update age', () => {
@@ -43,5 +46,25 @@ describe(AggregateRoot, () => {
 
     expect(newPerson.getAge()).toBe(812)
     expect(newPerson.getName()).toBe('Gervásio')
+    expect(newPerson.getId()).toBe(person.getId())
+  })
+
+  it('keep logs', () => {
+    const id = UniqueEntityId.create()
+    const date = new Date()
+    const person = Person.create(
+      {
+        name: 'Gervásio', age: 281
+      },
+      id,
+      [{ date }]
+    ).getValue() as Person
+
+    const newPerson = person.changeAge(812).getValue() as Person
+
+    expect(newPerson.getAge()).toBe(812)
+    expect(newPerson.getName()).toBe('Gervásio')
+    expect(newPerson.getId()).toBe(id.toString())
+    expect(newPerson.getLogs()).toEqual([{ date }])
   })
 })
