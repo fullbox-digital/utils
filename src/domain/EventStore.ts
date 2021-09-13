@@ -10,24 +10,27 @@ export interface RegisterSubscriptionProps {
 export abstract class EventStore {
   private static readonly subscriptionsMap = new Map<string, Array<EventSubscription<unknown>>>()
 
-  private static readonly markedAggregates = new Map<string, AggregateRoot<unknown>>()
+  private static readonly markedDomainEvents = new Map<string, DomainEvent[]>()
 
   static markAggregateForDispatch (aggregate: AggregateRoot<unknown>): void {
-    const aggregateFound = EventStore.markedAggregates.get(aggregate.getId())
-    if (!aggregateFound) {
-      EventStore.markedAggregates.set(aggregate.getId(), aggregate)
+    const domainEventsFound = EventStore.markedDomainEvents.get(aggregate.getId())
+    if (!domainEventsFound) {
+      EventStore.markedDomainEvents.set(aggregate.getId(), aggregate.getDomainEvents())
+    } else {
+      EventStore.markedDomainEvents.set(aggregate.getId(), [
+        ...domainEventsFound,
+        ...aggregate.getDomainEvents()
+      ])
     }
   }
 
   static async dispatchEventsForAggregate (id: string): Promise<void> {
-    const aggregate = EventStore.markedAggregates.get(id)
-    if (aggregate) {
-      const domainEvents = aggregate.getDomainEvents()
+    const domainEvents = EventStore.markedDomainEvents.get(id)
+    if (domainEvents) {
       for (const domainEvent of domainEvents) {
         await EventStore.dispatchEvent(domainEvent)
       }
-      aggregate.clearEvents()
-      EventStore.markedAggregates.delete(id)
+      EventStore.markedDomainEvents.delete(id)
     }
   }
 
