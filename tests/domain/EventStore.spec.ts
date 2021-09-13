@@ -3,6 +3,8 @@ import {
   CoffeeFinished,
   CoffeeMachine,
   CoffeeMachineDefectFound,
+  CoffeeMachineStartedPreparation,
+  PlayEpicSaxGuyMusicAfterCoffeeMachineStartedWork,
   SendSmsAfterCoffeeFinished,
   WarnAfterCoffeeMachineDefectFound
 } from './model-mocks'
@@ -11,11 +13,18 @@ interface SutTypes {
   coffeeMachine: CoffeeMachine
   sendSmsAfterDeliciousCoffeeFinished: SendSmsAfterCoffeeFinished
   warnAfterCoffeeMachineDefectFound: WarnAfterCoffeeMachineDefectFound
+  playEpicSaxGuyMusicAfterCoffeeMachineStartedWork: PlayEpicSaxGuyMusicAfterCoffeeMachineStartedWork
 }
 
 const makeSut = (): SutTypes => {
+  const playEpicSaxGuyMusicAfterCoffeeMachineStartedWork =
+  new PlayEpicSaxGuyMusicAfterCoffeeMachineStartedWork()
   const sendSmsAfterDeliciousCoffeeFinished = new SendSmsAfterCoffeeFinished()
   const warnAfterCoffeeMachineDefectFound = new WarnAfterCoffeeMachineDefectFound()
+  EventStore.registerSubscription({
+    domainEventName: CoffeeMachineStartedPreparation.name,
+    subscription: playEpicSaxGuyMusicAfterCoffeeMachineStartedWork
+  })
   EventStore.registerSubscription({
     domainEventName: CoffeeFinished.name,
     subscription: sendSmsAfterDeliciousCoffeeFinished
@@ -24,10 +33,16 @@ const makeSut = (): SutTypes => {
     domainEventName: CoffeeMachineDefectFound.name,
     subscription: warnAfterCoffeeMachineDefectFound
   })
+  const coffeeMachine = CoffeeMachine.create({
+    name: 'Super Coffee Machine',
+    coffeeGrams: 500,
+    working: false
+  })
   return {
-    coffeeMachine: new CoffeeMachine({ name: 'Super Coffee Machine' }),
+    coffeeMachine,
     sendSmsAfterDeliciousCoffeeFinished,
-    warnAfterCoffeeMachineDefectFound
+    warnAfterCoffeeMachineDefectFound,
+    playEpicSaxGuyMusicAfterCoffeeMachineStartedWork
   }
 }
 
@@ -35,11 +50,13 @@ describe(EventStore, () => {
   test('should store domain event in aggregate root', () => {
     const { coffeeMachine } = makeSut()
 
-    coffeeMachine.finish()
+    const coffeeMachineWorking = coffeeMachine.start()
+    expect(coffeeMachineWorking.getDomainEvents().length).toBe(1)
+    expect(coffeeMachineWorking.getDomainEvents()[0].dateTimeOccurred).toBeTruthy()
 
-    const events = coffeeMachine.getDomainEvents()
-    expect(events.length).toBe(1)
-    expect(events[0].dateTimeOccurred).toBeTruthy()
+    const coffeeMachineWithDeliciousCoffee = coffeeMachineWorking.finish()
+    expect(coffeeMachineWithDeliciousCoffee.getDomainEvents().length).toBe(1)
+    expect(coffeeMachineWithDeliciousCoffee.getDomainEvents()[0].dateTimeOccurred).toBeTruthy()
   })
 
   test('should call occurred in subscriptions if dispatchEventsForAggregate is called',
@@ -47,20 +64,28 @@ describe(EventStore, () => {
       const {
         coffeeMachine,
         warnAfterCoffeeMachineDefectFound,
-        sendSmsAfterDeliciousCoffeeFinished
+        sendSmsAfterDeliciousCoffeeFinished,
+        playEpicSaxGuyMusicAfterCoffeeMachineStartedWork
       } = makeSut()
 
-      coffeeMachine.finish()
-      coffeeMachine.defectFound()
+      const coffeeMachineWorking = coffeeMachine.start()
+      const coffeeMachineWithDeliciousCoffee = coffeeMachineWorking.finish()
+      const coffeeMachineBroken = coffeeMachineWithDeliciousCoffee.defectFound()
 
-      const events = [...coffeeMachine.getDomainEvents()]
-
+      const playMusicOccurredSpy = jest.spyOn(
+        playEpicSaxGuyMusicAfterCoffeeMachineStartedWork,
+        'occurred'
+      )
       const sendSmsOccurredSpy = jest.spyOn(sendSmsAfterDeliciousCoffeeFinished, 'occurred')
       const warnOccurredSpy = jest.spyOn(warnAfterCoffeeMachineDefectFound, 'occurred')
 
       await EventStore.dispatchEventsForAggregate(coffeeMachine.getId())
 
-      expect(sendSmsOccurredSpy).toHaveBeenCalledWith(events[0])
-      expect(warnOccurredSpy).toHaveBeenCalledWith(events[1])
+      expect(playMusicOccurredSpy).toHaveBeenCalledWith(coffeeMachineWorking.getDomainEvents()[0])
+
+      expect(sendSmsOccurredSpy).toHaveBeenCalledWith(
+        coffeeMachineWithDeliciousCoffee.getDomainEvents()[0]
+      )
+      expect(warnOccurredSpy).toHaveBeenCalledWith(coffeeMachineBroken.getDomainEvents()[0])
     })
 })
