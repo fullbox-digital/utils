@@ -1,4 +1,4 @@
-import { AggregateRoot, DomainEvent, EventSubscription } from '../../src'
+import { AggregateRoot, DomainEvent, EventSubscription, Logs, UniqueEntityId } from '../../src'
 
 export class CoffeeFinished implements DomainEvent {
   dateTimeOccurred: Date
@@ -28,20 +28,97 @@ export class CoffeeMachineDefectFound implements DomainEvent {
   }
 }
 
+export class CoffeeMachineStartedPreparation implements DomainEvent {
+  dateTimeOccurred: Date
+
+  constructor (
+    private readonly coffeeMachine: CoffeeMachine
+  ) {
+    this.dateTimeOccurred = new Date()
+  }
+
+  getAggregateId (): string {
+    return this.coffeeMachine.getId()
+  }
+}
+
 export interface CoffeeMachineProps {
   name: string
   defect?: boolean
+  coffeeGrams: number
+  working: boolean
 }
 
 export class CoffeeMachine extends AggregateRoot<CoffeeMachineProps> {
-  finish (): void {
-    // Action
-    this.addDomainEvent(new CoffeeFinished(this))
+  static create (
+    props: CoffeeMachineProps,
+    id?: UniqueEntityId,
+    logs?: Logs<any>
+  ): CoffeeMachine {
+    // Validations
+    return new CoffeeMachine(props, id, logs)
   }
 
-  defectFound (): void {
-    // Action
-    this.addDomainEvent(new CoffeeMachineDefectFound(this))
+  start (): CoffeeMachine {
+    if (this.props.working) {
+      throw new Error('The coffee machine already working')
+    }
+
+    if (this.props.coffeeGrams < 10) {
+      throw new Error('The coffee is over')
+    }
+
+    if (this.props.defect) {
+      throw new Error('The coffee machine is broken')
+    }
+
+    const updatedCoffeeMachine = this.update(
+      CoffeeMachine.create, {
+        working: true
+      }
+    )
+
+    updatedCoffeeMachine.addDomainEvent(
+      new CoffeeMachineStartedPreparation(updatedCoffeeMachine)
+    )
+
+    return updatedCoffeeMachine
+  }
+
+  finish (): CoffeeMachine {
+    const updatedCoffeeMachine = this.update(
+      CoffeeMachine.create, {
+        coffeeGrams: this.props.coffeeGrams - 10,
+        working: false
+      }
+    )
+
+    updatedCoffeeMachine.addDomainEvent(
+      new CoffeeFinished(updatedCoffeeMachine)
+    )
+
+    return updatedCoffeeMachine
+  }
+
+  defectFound (): CoffeeMachine {
+    const updatedCoffeeMachine = this.update(
+      CoffeeMachine.create, {
+        defect: true
+      }
+    )
+
+    updatedCoffeeMachine.addDomainEvent(
+      new CoffeeMachineDefectFound(updatedCoffeeMachine)
+    )
+
+    return updatedCoffeeMachine
+  }
+}
+
+export class PlayEpicSaxGuyMusicAfterCoffeeMachineStartedWork
+implements EventSubscription<CoffeeMachineStartedPreparation> {
+  async occurred (domainEvent: CoffeeMachineStartedPreparation): Promise<void> {
+    // Play Epc Sax Guy Music
   }
 }
 
