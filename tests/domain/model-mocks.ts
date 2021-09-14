@@ -10,7 +10,7 @@ export class CoffeeFinished implements DomainEvent {
   }
 
   getAggregateId (): string {
-    return this.coffeeMachine.getId()
+    return this.coffeeMachine.getIdentifier().toString()
   }
 }
 
@@ -24,7 +24,7 @@ export class CoffeeMachineDefectFound implements DomainEvent {
   }
 
   getAggregateId (): string {
-    return this.coffeeMachine.getId()
+    return this.coffeeMachine.getIdentifier().toString()
   }
 }
 
@@ -38,7 +38,7 @@ export class CoffeeMachineStartedPreparation implements DomainEvent {
   }
 
   getAggregateId (): string {
-    return this.coffeeMachine.getId()
+    return this.coffeeMachine.getIdentifier().toString()
   }
 }
 

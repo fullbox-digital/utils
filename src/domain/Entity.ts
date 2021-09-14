@@ -13,7 +13,14 @@ export class Entity<T> {
     this.id = id ?? UniqueEntityId.create()
   }
 
+  /**
+   * @deprecated The method should not be used
+   */
   getId (): string { return this.id.toString() }
+
+  getIdentifier (): UniqueEntityId {
+    return this.id
+  }
 
   getProps (): T { return this.props }
 

@@ -1,3 +1,4 @@
+import { UniqueEntityId } from '..'
 import { AggregateRoot } from './AggregateRoot'
 import { DomainEvent } from './DomainEvent'
 import { EventSubscription } from './EventSubscription'
@@ -10,21 +11,26 @@ export interface RegisterSubscriptionProps {
 export abstract class EventStore {
   private static readonly subscriptionsMap = new Map<string, Array<EventSubscription<unknown>>>()
 
-  private static readonly markedDomainEvents = new Map<string, DomainEvent[]>()
+  private static readonly markedDomainEvents = new Map<UniqueEntityId, DomainEvent[]>()
 
   static markAggregateForDispatch (aggregate: AggregateRoot<unknown>): void {
-    const domainEventsFound = EventStore.markedDomainEvents.get(aggregate.getId())
+    const domainEventsFound = EventStore.markedDomainEvents.get(
+      aggregate.getIdentifier()
+    )
     if (!domainEventsFound) {
-      EventStore.markedDomainEvents.set(aggregate.getId(), aggregate.getDomainEvents())
+      EventStore.markedDomainEvents.set(
+        aggregate.getIdentifier(),
+        aggregate.getDomainEvents()
+      )
     } else {
-      EventStore.markedDomainEvents.set(aggregate.getId(), [
+      EventStore.markedDomainEvents.set(aggregate.getIdentifier(), [
         ...domainEventsFound,
         ...aggregate.getDomainEvents()
       ])
     }
   }
 
-  static async dispatchEventsForAggregate (id: string): Promise<void> {
+  static async dispatchEventsForAggregate (id: UniqueEntityId): Promise<void> {
     const domainEvents = EventStore.markedDomainEvents.get(id)
     if (domainEvents) {
       for (const domainEvent of domainEvents) {

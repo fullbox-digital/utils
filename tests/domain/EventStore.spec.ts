@@ -79,7 +79,7 @@ describe(EventStore, () => {
       const sendSmsOccurredSpy = jest.spyOn(sendSmsAfterDeliciousCoffeeFinished, 'occurred')
       const warnOccurredSpy = jest.spyOn(warnAfterCoffeeMachineDefectFound, 'occurred')
 
-      await EventStore.dispatchEventsForAggregate(coffeeMachine.getId())
+      await EventStore.dispatchEventsForAggregate(coffeeMachine.getIdentifier())
 
       expect(playMusicOccurredSpy).toHaveBeenCalledWith(coffeeMachineWorking.getDomainEvents()[0])
 

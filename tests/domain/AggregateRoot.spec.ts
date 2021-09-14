@@ -36,7 +36,7 @@ describe(AggregateRoot, () => {
 
     expect(newPerson.getName()).toBe('Adolfo')
     expect(newPerson.getAge()).toBe(281)
-    expect(newPerson.getId()).toBe(person.getId())
+    expect(newPerson.getIdentifier()).toEqual(person.getIdentifier())
   })
 
   it('update age', () => {
@@ -46,7 +46,7 @@ describe(AggregateRoot, () => {
 
     expect(newPerson.getAge()).toBe(812)
     expect(newPerson.getName()).toBe('Gervásio')
-    expect(newPerson.getId()).toBe(person.getId())
+    expect(newPerson.getIdentifier()).toEqual(person.getIdentifier())
   })
 
   it('keep logs', () => {
@@ -64,7 +64,7 @@ describe(AggregateRoot, () => {
 
     expect(newPerson.getAge()).toBe(812)
     expect(newPerson.getName()).toBe('Gervásio')
-    expect(newPerson.getId()).toBe(id.toString())
+    expect(newPerson.getIdentifier()).toEqual(id)
     expect(newPerson.getLogs()).toEqual([{ date }])
   })
 })
