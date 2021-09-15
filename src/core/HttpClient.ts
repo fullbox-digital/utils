@@ -5,6 +5,7 @@ type InputType = 'query' | 'body' | never
 type RequestParams<Data, DataName extends InputType> = Pick<Record<InputType, Data>, DataName> & {
   method: 'get' | 'delete' | 'post' | 'put'
   path: string
+  header?: any
 }
 
 interface Successful<T> {
