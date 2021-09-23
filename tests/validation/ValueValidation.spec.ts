@@ -319,6 +319,46 @@ describe(ValueValidation, () => {
         expect(result.hasError()).toBeFalsy()
       })
     })
+
+    describe('stringFilled()', () => {
+      test('Should return ValidationError if ', () => {
+        const result = check('', 'string').stringFilled()
+
+        expect(result.hasError()).toBeTruthy()
+        expect(result.getErrors()).toEqual([
+          new ValidationError('string não está preenchido!')
+        ])
+      })
+
+      test('Should return false for errors', () => {
+        const result = check('any_text', 'string').stringFilled()
+
+        expect(result.hasError()).toBeFalsy()
+      })
+    })
+
+    describe('validate()', () => {
+      test('Should return ValidationError if ', () => {
+        const result = check('palhaço', 'ator').validate({
+          isValid: (value: string): boolean => { return value === 'mimico' },
+          errorMessage: 'não é um mímico'
+        })
+
+        expect(result.hasError()).toBeTruthy()
+        expect(result.getErrors()).toEqual([
+          new ValidationError('ator não é um mímico')
+        ])
+      })
+
+      test('Should return false for errors', () => {
+        const result = check('tenho_10_anos_de_cnh', 'motorista').validate({
+          isValid: (value: string): boolean => { return value === 'tenho_10_anos_de_cnh' },
+          errorMessage: 'não tem 10 anos de CNH'
+        })
+
+        expect(result.hasError()).toBeFalsy()
+      })
+    })
   })
 
   describe(combineValidations, () => {
@@ -330,6 +370,11 @@ describe(ValueValidation, () => {
       }
 
       const validations = combineValidations(
+        check(true, 'teste').validate({
+          isValid: (value: string): boolean => { return typeof value === 'string' },
+          errorMessage: 'não é uma string'
+        }),
+        check('', 'string').stringFilled(),
         check(null, 'field').required(),
         check(null, 'field').requiredIf(true),
         check('0123456789a', 'alpha_numeric').isLength({ min: 1, max: 10 }),
@@ -353,6 +398,8 @@ describe(ValueValidation, () => {
 
       expect(validations.hasError()).toBeTruthy()
       expect(validations.getErrors()).toEqual([
+        new ValidationError('teste não é uma string'),
+        new ValidationError('string não está preenchido!'),
         new ValidationError('field é obrigatório!'),
         new ValidationError('field é obrigatório!'),
         new ValidationError('alpha_numeric precisa ser maior ou igual a 1 e menor ou igual a 10!'),
