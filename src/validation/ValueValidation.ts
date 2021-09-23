@@ -168,6 +168,34 @@ export class ValueValidation extends Validation {
     return this
   }
 
+  stringFilled (): ValueValidation {
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (this.value?.length <= 0) {
+        this.errors.push(new ValidationError(
+          `${this.field} ${ValueValidation.filledErrorMessage()}`)
+        )
+      }
+    }
+    return this
+  }
+
+  validate (params: {
+    isValid: (value: any) => boolean
+    errorMessage: string
+  }): ValueValidation {
+    const { isValid, errorMessage } = params
+
+    if (!ObjectHelper.isNullOrUndefined(this.value)) {
+      if (!!isValid && !isValid(this.value)) {
+        this.errors.push(new ValidationError(
+          `${this.field} ${errorMessage}`)
+        )
+      }
+    }
+
+    return this
+  }
+
   static lengthErrorMessage = (min: number, max: number): string =>
     `precisa ser maior ou igual a ${min} e menor ou igual a ${max}!`
 
