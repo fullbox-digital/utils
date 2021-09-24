@@ -11,6 +11,7 @@ export * from './domain/Action'
 export * from './domain/List'
 export * from './domain/SelectList'
 export * from './domain/Navigation'
+export * from './domain/Timestamp'
 
 export * from './errors/BusinessError'
 export * from './errors/IdRequiredError'
