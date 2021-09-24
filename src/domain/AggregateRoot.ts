@@ -2,14 +2,15 @@ import { DomainEvent } from './DomainEvent'
 import { EventStore } from './EventStore'
 import { Entity } from './Entity'
 import { UniqueEntityId } from './UniqueEntityId'
+import { Timestamp } from './Timestamp'
 
-export type Logs<T> = Array<{ date: number } & T>
+export type Log<T> = { date: Timestamp } & T
 
 export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
   private readonly domainEvents: DomainEvent[] = []
-  private readonly logs: Logs<E> = []
+  private readonly logs: Array<Log<E>> = []
 
-  constructor (props: T, id?: UniqueEntityId, logs?: Logs<E>) {
+  constructor (props: T, id?: UniqueEntityId, logs?: Array<Log<E>>) {
     super(props, id)
     this.logs = logs ?? []
   }
@@ -22,7 +23,7 @@ export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
     this.domainEvents.push(domainEvent)
     if (log) {
       this.logs.push({
-        date: domainEvent.dateTimeOccurred.getTime(),
+        date: domainEvent.dateTimeOccurred,
         ...log
       })
     }
@@ -33,10 +34,10 @@ export abstract class AggregateRoot<T, E = unknown> extends Entity<T> {
     this.domainEvents.splice(0, this.domainEvents.length)
   }
 
-  getLogs (): Logs<E> { return this.logs }
+  getLogs (): Array<Log<E>> { return this.logs }
 
   protected update<R> (
-    create: (props: T, id: UniqueEntityId, logs: Logs<any>) => R,
+    create: (props: T, id: UniqueEntityId, logs: Array<Log<E>>) => R,
     params: Partial<T>
   ): R {
     return create(
