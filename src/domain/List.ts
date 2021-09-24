@@ -1,6 +1,6 @@
 import { ActionList } from './Action'
-import { FindFieldData } from './FindFieldData';
-import { NavigationList } from './Navigation';
+import { FindFieldData } from './FindFieldData'
+import { NavigationList } from './Navigation'
 
 export interface List<T, H, S = object> {
   header: H
