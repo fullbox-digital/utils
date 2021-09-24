@@ -1,4 +1,4 @@
-import { ObjectHelper } from '..'
+import { ObjectHelper } from '../helper/ObjectHelper'
 import { Validation } from './Validation'
 import { ValidationError } from './ValidationError'
 

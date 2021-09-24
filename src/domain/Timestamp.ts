@@ -1,4 +1,7 @@
-import { check, combineValidations, DateTimeUtils, ValueObject } from '..'
+import { combineValidations } from '../validation/combine-validations'
+import { check } from '../validation/check'
+import { DateTimeUtils } from '../core/DateTimeUtils'
+import { ValueObject } from './ValueObject'
 
 interface Props {
   timestamp: number
