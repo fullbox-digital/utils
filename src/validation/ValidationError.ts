@@ -1,4 +1,4 @@
-import { BusinessError } from '..'
+import { BusinessError } from '../errors/BusinessError'
 
 export class ValidationError extends BusinessError {
   constructor (message: string | ValidationError[]) {
