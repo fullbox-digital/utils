@@ -188,7 +188,7 @@ export class ValueValidation extends Validation {
     if (!ObjectHelper.isNullOrUndefined(this.value)) {
       if (!!isValid && !isValid(this.value)) {
         this.errors.push(new ValidationError(
-          `${this.field} ${errorMessage}`)
+          `${this.field} ${errorMessage}!`)
         )
       }
     }

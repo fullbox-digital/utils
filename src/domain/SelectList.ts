@@ -1,4 +1,4 @@
 export type SelectList<T> = Array<{
-  label: string,
+  label: string
   value: T
 }>

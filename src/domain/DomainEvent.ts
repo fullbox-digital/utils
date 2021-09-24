@@ -1,4 +1,5 @@
+import { Timestamp } from './Timestamp'
 
-export interface DomainEvent {
-  dateTimeOccurred: Date
+export class DomainEvent {
+  readonly dateTimeOccurred: Timestamp = Timestamp.now()
 }
