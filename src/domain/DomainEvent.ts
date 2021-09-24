@@ -1,5 +1,5 @@
 import { Timestamp } from './Timestamp'
 
 export class DomainEvent {
-  dateTimeOccurred: Timestamp = Timestamp.now()
+  protected readonly dateTimeOccurred: Timestamp = Timestamp.now()
 }
