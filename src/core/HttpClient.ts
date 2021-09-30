@@ -1,30 +1,27 @@
+/* eslint-disable max-len */
 import { Either } from '../railway/Either'
 
-type InputType = 'query' | 'body' | never
+export type InputType = 'query' | 'body' | never
 
-type RequestParams<Data, DataName extends InputType> = Pick<Record<InputType, Data>, DataName> & {
+export type RequestParams<Data, DataName extends InputType> = Pick<Record<InputType, Data>, DataName> & {
   method: 'get' | 'delete' | 'post' | 'put'
   path: string
   header?: any
+  responseType?: 'arraybuffer'| 'blob'| 'document'| 'json'| 'text'| 'stream'
 }
 
-interface Successful<T> {
+export interface Successful<T> {
   status: number
   data: T
 }
 
-interface Unsuccessful<T> {
+export interface Unsuccessful<T> {
   status: number
   data?: T
 }
 
-export interface HttpClient {
-  request<
-    SuccessfulResponse = any,
-    UnsuccessfulResponse = unknown,
-    InputData = unknown,
-    DataName extends InputType = any
-  >(
+export default interface HttpClient {
+  request<SuccessfulResponse = any, UnsuccessfulResponse = any, InputData = unknown, DataName extends InputType | never = any>(
     params: RequestParams<InputData, DataName>
   ): Promise<Either<Unsuccessful<UnsuccessfulResponse>, Successful<SuccessfulResponse>>>
 }
