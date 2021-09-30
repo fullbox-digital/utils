@@ -7,6 +7,7 @@ export type RequestParams<Data, DataName extends InputType> = Pick<Record<InputT
   method: 'get' | 'delete' | 'post' | 'put'
   path: string
   header?: any
+  responseType?: 'arraybuffer'| 'blob'| 'document'| 'json'| 'text'| 'stream'
 }
 
 export interface Successful<T> {
