@@ -2,6 +2,7 @@ import { combineValidations } from '../validation/combine-validations'
 import { check } from '../validation/check'
 import { DateTimeUtils } from '../core/DateTimeUtils'
 import { ValueObject } from './ValueObject'
+import { TextHelper } from '..'
 
 interface Props {
   timestamp: number
@@ -35,6 +36,40 @@ export class Timestamp extends ValueObject<Props> {
 
   getValue (): number { return this.props.timestamp }
   getDate (): Date { return this.props.datetime }
+
+  getYear (): string {
+    return TextHelper.fillLeftSide(
+      this.props.datetime.getFullYear().toString(), 4, '0'
+    ).substring(2, 4)
+  }
+
+  getFullYear (): string {
+    return TextHelper.fillLeftSide(this.props.datetime.getFullYear().toString(), 4, '0')
+  }
+
+  getMonth (): string {
+    return TextHelper.fillLeftSide((this.props.datetime.getMonth() + 1).toString(), 2, '0')
+  }
+
+  getDay (): string {
+    return TextHelper.fillLeftSide(this.props.datetime.getDate().toString(), 2, '0')
+  }
+
+  getHour (): string {
+    return TextHelper.fillLeftSide(this.props.datetime.getHours().toString(), 2, '0')
+  }
+
+  getMinute (): string {
+    return TextHelper.fillLeftSide(this.props.datetime.getMinutes().toString(), 2, '0')
+  }
+
+  getSecond (): string {
+    return TextHelper.fillLeftSide(this.props.datetime.getSeconds().toString(), 2, '0')
+  }
+
+  getMillisecond (): string {
+    return TextHelper.fillLeftSide(this.props.datetime.getMilliseconds().toString(), 3, '0')
+  }
 
   shiftYears (quantity: number): Timestamp {
     return new Timestamp(DateTimeUtils.shiftYears(this.props.datetime, quantity).getTime())
