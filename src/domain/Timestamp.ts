@@ -36,6 +36,14 @@ export class Timestamp extends ValueObject<Props> {
   getValue (): number { return this.props.timestamp }
   getDate (): Date { return this.props.datetime }
 
+  getYear (): number { return this.props.datetime.getFullYear() }
+  getMonth (): number { return this.props.datetime.getMonth() + 1 }
+  getDay (): number { return this.props.datetime.getDate() }
+  getHour (): number { return this.props.datetime.getHours() }
+  getMinute (): number { return this.props.datetime.getMinutes() }
+  getSecond (): number { return this.props.datetime.getSeconds() }
+  getMillisecond (): number { return this.props.datetime.getMilliseconds() }
+
   shiftYears (quantity: number): Timestamp {
     return new Timestamp(DateTimeUtils.shiftYears(this.props.datetime, quantity).getTime())
   }
