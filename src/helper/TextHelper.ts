@@ -18,7 +18,7 @@ export abstract class TextHelper {
     if (width > 0) {
       return new Array(width + (value.includes('.') ? 2 : 1)).join(valueToFill) + value
     }
-    return value.substring(0, width)
+    return value
   }
 
   static fillRightSide (value: string, width: number, valueToFill: string): string {
@@ -27,6 +27,6 @@ export abstract class TextHelper {
     if (width > 0) {
       return value + new Array(width + (value.includes('.') ? 2 : 1)).join(valueToFill)
     }
-    return value.substring(0, width)
+    return value
   }
 }
