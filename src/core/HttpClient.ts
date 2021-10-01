@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
 import { Either } from '../railway/Either'
+import https from 'https'
 
-export type InputType = 'query' | 'body' | never
-
-export type RequestParams<Data, DataName extends InputType> = Pick<Record<InputType, Data>, DataName> & {
+export type RequestParams<Data, DataName extends 'query' | 'body'> = Pick<Record<'query' | 'body', Data>, DataName> & {
   method: 'get' | 'delete' | 'post' | 'put'
   path: string
   header?: any
   responseType?: 'arraybuffer'| 'blob'| 'document'| 'json'| 'text'| 'stream'
+  httpsAgent?: https.Agent
 }
 
 export interface Successful<T> {
@@ -21,7 +21,7 @@ export interface Unsuccessful<T> {
 }
 
 export default interface HttpClient {
-  request<SuccessfulResponse = any, UnsuccessfulResponse = any, InputData = unknown, DataName extends InputType | never = any>(
+  request<SuccessfulResponse = any, UnsuccessfulResponse = any, InputData = unknown, DataName extends 'query' | 'body' | never = any>(
     params: RequestParams<InputData, DataName>
   ): Promise<Either<Unsuccessful<UnsuccessfulResponse>, Successful<SuccessfulResponse>>>
 }
