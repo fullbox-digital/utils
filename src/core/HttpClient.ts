@@ -3,7 +3,7 @@ import { Either } from '../railway/Either'
 import https from 'https'
 
 export type RequestParams<Data, DataName extends 'query' | 'body'> = Pick<Record<'query' | 'body', Data>, DataName> & {
-  method: 'get' | 'delete' | 'post' | 'put'
+  method: 'get' | 'delete' | 'post' | 'put' | 'patch'
   path: string
   header?: any
   responseType?: 'arraybuffer'| 'blob'| 'document'| 'json'| 'text'| 'stream'
