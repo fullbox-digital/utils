@@ -20,7 +20,7 @@ export interface Unsuccessful<T> {
   data?: T
 }
 
-export default interface HttpClient {
+export interface HttpClient {
   request<SuccessfulResponse = any, UnsuccessfulResponse = any, InputData = unknown, DataName extends 'query' | 'body' | never = any>(
     params: RequestParams<InputData, DataName>
   ): Promise<Either<Unsuccessful<UnsuccessfulResponse>, Successful<SuccessfulResponse>>>
