@@ -11,7 +11,7 @@ const bodyError = (status: number, errors: Error[]): HttpResponse<ErrorBody> => 
 export abstract class HttpStatus {
   static ok = <T = never>(body?: T): HttpResponse<T> => ({ status: 200, body })
   static noContent = (): HttpResponse<never> => ({ status: 204 })
-  static created = (body: CreatedBody): HttpResponse<CreatedBody> => ({
+  static created = (body: CreatedBody): HttpResponse<{ id: string }> => ({
     status: 201,
     body: { id: body.id.toString() }
   })
