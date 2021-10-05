@@ -11,7 +11,10 @@ const bodyError = (status: number, errors: Error[]): HttpResponse<ErrorBody> => 
 export abstract class HttpStatus {
   static ok = <T = never>(body?: T): HttpResponse<T> => ({ status: 200, body })
   static noContent = (): HttpResponse<never> => ({ status: 204 })
-  static created = (body: CreatedBody): HttpResponse<CreatedBody> => ({ status: 201, body })
+  static created = (body: CreatedBody): HttpResponse<CreatedBody> => ({
+    status: 201,
+    body: { id: body.id.toString() }
+  })
 
   static badRequest = (...errors: Error[]): HttpResponse<ErrorBody> => bodyError(400, errors)
   static unauthorized = (...errors: Error[]): HttpResponse<ErrorBody> => bodyError(401, errors)
