@@ -98,4 +98,8 @@ export class Timestamp extends ValueObject<Props> {
   shiftMilliseconds (quantity: number): Timestamp {
     return new Timestamp(this.props.timestamp + quantity)
   }
+
+  toLocaleString (locale: string, timeZone: string): string {
+    return this.props.datetime.toLocaleString(locale, { timeZone })
+  }
 }
