@@ -1,6 +1,6 @@
 import { ResponseType } from './ResponseType'
 
-export interface SuccessBody {
+export interface AlertBody {
   message: string
-  type: ResponseType.SUCCESS
+  type: ResponseType.WARNING
 }

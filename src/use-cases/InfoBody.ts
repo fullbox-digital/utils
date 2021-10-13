@@ -1,6 +1,6 @@
 import { ResponseType } from './ResponseType'
 
-export interface SuccessBody {
+export interface InfoBody {
   message: string
-  type: ResponseType.SUCCESS
+  type: ResponseType.INFO
 }
