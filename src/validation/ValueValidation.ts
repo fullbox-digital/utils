@@ -179,6 +179,19 @@ export class ValueValidation extends Validation {
     return this
   }
 
+  each(callback: (value: any) => ValueValidation): ValueValidation {
+    if (Array.isArray(this.value)) {
+      for (const value of this.value) {
+        const valueValidation = callback(value)
+        if (valueValidation.hasError()) {
+          this.errors.push(...valueValidation.getErrors())
+        }
+      }
+    }
+
+    return this
+  }
+
   validate (params: {
     isValid: (value: any) => boolean
     errorMessage: string

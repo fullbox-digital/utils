@@ -1,12 +1,17 @@
-import { AggregateRoot, DomainEvent, EventSubscription, Logs, UniqueEntityId } from '../../src'
+import {
+  AggregateRoot,
+  DomainEvent,
+  EventSubscription,
+  Log,
+  Timestamp,
+  UniqueEntityId
+} from '../../src'
 
 export class CoffeeFinished implements DomainEvent {
-  dateTimeOccurred: Date
-
+  dateTimeOccurred: Timestamp = Timestamp.now()
   constructor (
     private readonly coffeeMachine: CoffeeMachine
   ) {
-    this.dateTimeOccurred = new Date()
   }
 
   getAggregateId (): string {
@@ -15,12 +20,10 @@ export class CoffeeFinished implements DomainEvent {
 }
 
 export class CoffeeMachineDefectFound implements DomainEvent {
-  dateTimeOccurred: Date
-
+  dateTimeOccurred: Timestamp = Timestamp.now()
   constructor (
     private readonly coffeeMachine: CoffeeMachine
   ) {
-    this.dateTimeOccurred = new Date()
   }
 
   getAggregateId (): string {
@@ -29,13 +32,11 @@ export class CoffeeMachineDefectFound implements DomainEvent {
 }
 
 export class CoffeeMachineStartedPreparation implements DomainEvent {
-  dateTimeOccurred: Date
+  dateTimeOccurred: Timestamp = Timestamp.now()
 
   constructor (
     private readonly coffeeMachine: CoffeeMachine
-  ) {
-    this.dateTimeOccurred = new Date()
-  }
+  ) { }
 
   getAggregateId (): string {
     return this.coffeeMachine.getIdentifier().toString()
@@ -53,7 +54,7 @@ export class CoffeeMachine extends AggregateRoot<CoffeeMachineProps> {
   static create (
     props: CoffeeMachineProps,
     id?: UniqueEntityId,
-    logs?: Logs<any>
+    logs?: Log<any>
   ): CoffeeMachine {
     // Validations
     return new CoffeeMachine(props, id, logs)

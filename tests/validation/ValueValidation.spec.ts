@@ -338,7 +338,7 @@ describe(ValueValidation, () => {
     })
 
     describe('validate()', () => {
-      test('Should return ValidationError if ', () => {
+      test('Should return ValidationError if return false', () => {
         const result = check('palhaço', 'ator').validate({
           isValid: (value: string): boolean => { return value === 'mimico' },
           errorMessage: 'não é um mímico'
@@ -346,7 +346,7 @@ describe(ValueValidation, () => {
 
         expect(result.hasError()).toBeTruthy()
         expect(result.getErrors()).toEqual([
-          new ValidationError('ator não é um mímico')
+          new ValidationError('ator não é um mímico!')
         ])
       })
 
@@ -398,7 +398,7 @@ describe(ValueValidation, () => {
 
       expect(validations.hasError()).toBeTruthy()
       expect(validations.getErrors()).toEqual([
-        new ValidationError('teste não é uma string'),
+        new ValidationError('teste não é uma string!'),
         new ValidationError('string não está preenchido!'),
         new ValidationError('field é obrigatório!'),
         new ValidationError('field é obrigatório!'),
@@ -452,6 +452,27 @@ describe(ValueValidation, () => {
       )
 
       expect(validations.hasError()).toBeFalsy()
+    })
+  })
+
+  describe('each', () => {
+    test('Should return error if value the array is not valid', () => {
+      const values = ['katana', '', null]
+      const description = 'bowie'
+
+      const result = combineValidations(check(values, description).each((value: string) => check(value, description).filled().required()))
+
+      expect(result.hasError()).toBeTruthy()
+      expect(result.getErrors()).toBeTruthy()
+    })
+
+    test('Should return ok', () => {
+      const values = ['katana', 'chopper', 'bowie']
+      const description = 'edc'
+
+      const result = combineValidations(check(values, description).each((value: string) => check(value, description).filled().required()))
+
+      expect(result.hasError()).toBeFalsy()
     })
   })
 })
