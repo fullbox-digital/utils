@@ -460,7 +460,10 @@ describe(ValueValidation, () => {
       const values = ['katana', '', null]
       const description = 'bowie'
 
-      const result = combineValidations(check(values, description).each((value: string) => check(value, description).filled().required()))
+      const result = combineValidations(
+        check(values, description)
+          .each((value: string) => check(value, description).filled().required())
+      )
 
       expect(result.hasError()).toBeTruthy()
       expect(result.getErrors()).toBeTruthy()
@@ -470,7 +473,10 @@ describe(ValueValidation, () => {
       const values = ['katana', 'chopper', 'bowie']
       const description = 'edc'
 
-      const result = combineValidations(check(values, description).each((value: string) => check(value, description).filled().required()))
+      const result = combineValidations(
+        check(values, description)
+          .each((value: string) => check(value, description).filled().required())
+      )
 
       expect(result.hasError()).toBeFalsy()
     })
