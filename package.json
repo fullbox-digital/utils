@@ -1,6 +1,6 @@
 {
   "name": "@boxfull/utils",
-  "version": "1.0.83",
+  "version": "1.0.84",
   "description": "",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
