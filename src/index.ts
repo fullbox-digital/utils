@@ -34,6 +34,7 @@ export * from './helper/ObjectHelper'
 export * from './helper/TextHelper'
 export * from './helper/HashingHelper'
 export * from './helper/JwtHelper'
+export * from './helper/BooleanHelper'
 
 export * from './railway/Either'
 
