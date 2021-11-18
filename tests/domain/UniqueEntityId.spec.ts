@@ -18,43 +18,43 @@ describe(UniqueEntityId, () => {
     })
   })
 
-  describe('createOrNull()', () => {
+  describe('uniqueEntityIdOrNull()', () => {
     test('Should return null if id is undefined', () => {
-      const response = UniqueEntityId.createOrNull()
+      const response = UniqueEntityId.uniqueEntityIdOrNull()
       expect(response).toBeNull()
     })
 
     test('Should return null if id is null', () => {
-      const response = UniqueEntityId.createOrNull(null)
+      const response = UniqueEntityId.uniqueEntityIdOrNull(null)
       expect(response).toBeNull()
     })
 
     test('Should return entity if id is valid', () => {
-      const response = UniqueEntityId.createOrNull(faker.datatype.uuid())
+      const response = UniqueEntityId.uniqueEntityIdOrNull(faker.datatype.uuid())
       expect(response).toBeInstanceOf(UniqueEntityId)
     })
 
     test('Should throw error if id is invalid', () => {
-      expect(() => UniqueEntityId.createOrNull('invalid')).toThrow(IdInvalidError)
+      expect(() => UniqueEntityId.uniqueEntityIdOrNull('invalid')).toThrow(IdInvalidError)
     })
   })
 
-  describe('createOrThrow()', () => {
+  describe('uniqueEntityIdOrThrow()', () => {
     test('Should throw error if id is undefined', () => {
-      expect(() => UniqueEntityId.createOrThrow(undefined as any)).toThrow(IdRequiredError)
+      expect(() => UniqueEntityId.uniqueEntityIdOrThrow(undefined as any)).toThrow(IdRequiredError)
     })
 
     test('Should throw error if id is null', () => {
-      expect(() => UniqueEntityId.createOrThrow(null as any)).toThrow(IdRequiredError)
+      expect(() => UniqueEntityId.uniqueEntityIdOrThrow(null as any)).toThrow(IdRequiredError)
     })
 
     test('Should return entity if id is valid', () => {
-      const response = UniqueEntityId.createOrThrow(faker.datatype.uuid())
+      const response = UniqueEntityId.uniqueEntityIdOrThrow(faker.datatype.uuid())
       expect(response).toBeInstanceOf(UniqueEntityId)
     })
 
     test('Should throw error if id is invalid', () => {
-      expect(() => UniqueEntityId.createOrThrow('invalid')).toThrow(IdInvalidError)
+      expect(() => UniqueEntityId.uniqueEntityIdOrThrow('invalid')).toThrow(IdInvalidError)
     })
   })
 })

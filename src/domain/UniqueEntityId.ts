@@ -26,11 +26,11 @@ export class UniqueEntityId {
 
   static create (): UniqueEntityId { return new UniqueEntityId(uuid()) }
 
-  static createOrNull (id?: string | null): UniqueEntityId | null {
+  static uniqueEntityIdOrNull (id?: string | null): UniqueEntityId | null {
     return id ? new UniqueEntityId(id) : null
   }
 
-  static createOrThrow (id: string): UniqueEntityId {
+  static uniqueEntityIdOrThrow (id: string): UniqueEntityId {
     return new UniqueEntityId(id)
   }
 }
