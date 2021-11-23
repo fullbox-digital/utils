@@ -11,7 +11,8 @@
     "clean": "del ./build/*",
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "pub": "npm version patch && npm run build && npm publish",
-    "test": "jest --watch --no-cache"
+    "test": "jest --watch --no-cache",
+    "test:ci": "jest"
   },
   "keywords": [],
   "author": "",
