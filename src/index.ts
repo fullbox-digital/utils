@@ -26,6 +26,7 @@ export * from './use-cases/InfoBody'
 export * from './use-cases/SuccessBody'
 export * from './use-cases/WarningBody'
 export * from './use-cases/CreatedBody'
+export * from './use-cases/DownloadBody'
 export * from './use-cases/HttpResponse'
 export * from './use-cases/HttpStatus'
 
