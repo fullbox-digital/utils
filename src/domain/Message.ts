@@ -1,19 +1,19 @@
 import { ResponseType } from '..'
 
 export class Message {
-  private readonly _message: string
-  private readonly _type: ResponseType
+  private readonly message: string
+  private readonly type: ResponseType
 
   constructor (message: string, type: ResponseType) {
-    this._message = message
-    this._type = type
+    this.message = message
+    this.type = type
   }
 
   getMessage (): string {
-    return this._message
+    return this.message
   }
 
   getType (): ResponseType {
-    return this._type
+    return this.type
   }
 }
