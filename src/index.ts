@@ -30,6 +30,7 @@ export * from './use-cases/CreatedBody'
 export * from './use-cases/DownloadBody'
 export * from './use-cases/HttpResponse'
 export * from './use-cases/HttpStatus'
+export * from './use-cases/ResponseBody'
 
 export * from './helper/ArrayHelper'
 export * from './helper/ObjectHelper'
