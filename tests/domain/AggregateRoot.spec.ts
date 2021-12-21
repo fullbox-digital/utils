@@ -1,4 +1,4 @@
-import { AggregateRoot, Either, Logs, right, UniqueEntityId, ValidationError } from '../../src'
+import { AggregateRoot, Either, Log, right, UniqueEntityId, ValidationError } from '../../src'
 
 interface PersonProps {
   name: string
@@ -7,7 +7,7 @@ interface PersonProps {
 
 class Person extends AggregateRoot<PersonProps> {
   static create (
-    props: PersonProps, id?: UniqueEntityId, logs?: Logs<any>
+    props: PersonProps, id?: UniqueEntityId, logs?: Log<any>
   ): Either<ValidationError[], Person> {
     return right(new Person(props, id, logs))
   }

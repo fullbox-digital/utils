@@ -1,3 +1,4 @@
+import { ValidationComposite } from '..'
 import { ObjectHelper } from '../helper/ObjectHelper'
 import { Validation } from './Validation'
 import { ValidationError } from './ValidationError'
@@ -176,6 +177,19 @@ export class ValueValidation extends Validation {
         )
       }
     }
+    return this
+  }
+
+  each (callback: (value: any) => ValueValidation | ValidationComposite): ValueValidation {
+    if (Array.isArray(this.value)) {
+      for (const value of this.value) {
+        const valueValidation = callback(value)
+        if (valueValidation.hasError()) {
+          this.errors.push(...valueValidation.getErrors())
+        }
+      }
+    }
+
     return this
   }
 

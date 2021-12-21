@@ -18,11 +18,19 @@ export class UniqueEntityId {
 
   toString (): string { return this.id }
 
-  equals (id?: UniqueEntityId): boolean {
+  equals (id?: UniqueEntityId | null | undefined): boolean {
     if (id === null || id === undefined) { return false }
     if (!(id instanceof this.constructor)) { return false }
     return id.toString() === this.id.toString()
   }
 
   static create (): UniqueEntityId { return new UniqueEntityId(uuid()) }
+
+  static uniqueEntityIdOrNull (id?: string | null): UniqueEntityId | null {
+    return id ? new UniqueEntityId(id) : null
+  }
+
+  static uniqueEntityIdOrThrow (id: string): UniqueEntityId {
+    return new UniqueEntityId(id)
+  }
 }
