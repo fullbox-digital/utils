@@ -7,6 +7,18 @@ import {
   UniqueEntityId
 } from '../../src'
 
+export class CoffeeBreak implements DomainEvent {
+  dateTimeOccurred: Timestamp = Timestamp.now()
+  constructor (
+    private readonly coffeeMachine: CoffeeMachine
+  ) {
+  }
+
+  getAggregateId (): string {
+    return this.coffeeMachine.getIdentifier().toString()
+  }
+}
+
 export class CoffeeFinished implements DomainEvent {
   dateTimeOccurred: Timestamp = Timestamp.now()
   constructor (
@@ -98,6 +110,10 @@ export class CoffeeMachine extends AggregateRoot<CoffeeMachineProps> {
       new CoffeeFinished(updatedCoffeeMachine)
     )
 
+    updatedCoffeeMachine.addDomainEvent(
+      new CoffeeBreak(updatedCoffeeMachine)
+    )
+
     return updatedCoffeeMachine
   }
 
@@ -133,5 +149,12 @@ export class WarnAfterCoffeeMachineDefectFound
 implements EventSubscription<CoffeeMachineDefectFound> {
   async occurred (domainEvent: CoffeeMachineDefectFound): Promise<void> {
     // Warn
+  }
+}
+
+export class CallProgrammersForCoffee
+implements EventSubscription<CoffeeBreak> {
+  async occurred (domainEvent: CoffeeBreak): Promise<void> {
+    // Call programmers
   }
 }
