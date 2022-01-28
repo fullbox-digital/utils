@@ -20,12 +20,15 @@ export abstract class EventStore {
     if (!domainEventsFound) {
       EventStore.markedDomainEvents.set(
         aggregate.getIdentifier(),
-        aggregate.getDomainEvents()
+        [...aggregate.getDomainEvents()]
       )
     } else {
+      const domainEventsDiff = aggregate.getDomainEvents().filter(
+        (event) => !domainEventsFound.some((eventFound) => eventFound === event)
+      )
       EventStore.markedDomainEvents.set(aggregate.getIdentifier(), [
         ...domainEventsFound,
-        ...aggregate.getDomainEvents()
+        ...domainEventsDiff
       ])
     }
   }

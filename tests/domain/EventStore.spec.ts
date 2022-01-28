@@ -1,5 +1,7 @@
 import { EventStore } from '../../src'
 import {
+  CallProgrammersForCoffee,
+  CoffeeBreak,
   CoffeeFinished,
   CoffeeMachine,
   CoffeeMachineDefectFound,
@@ -14,6 +16,7 @@ interface SutTypes {
   sendSmsAfterDeliciousCoffeeFinished: SendSmsAfterCoffeeFinished
   warnAfterCoffeeMachineDefectFound: WarnAfterCoffeeMachineDefectFound
   playEpicSaxGuyMusicAfterCoffeeMachineStartedWork: PlayEpicSaxGuyMusicAfterCoffeeMachineStartedWork
+  callProgrammersForCoffee: CallProgrammersForCoffee
 }
 
 const makeSut = (): SutTypes => {
@@ -21,6 +24,7 @@ const makeSut = (): SutTypes => {
   new PlayEpicSaxGuyMusicAfterCoffeeMachineStartedWork()
   const sendSmsAfterDeliciousCoffeeFinished = new SendSmsAfterCoffeeFinished()
   const warnAfterCoffeeMachineDefectFound = new WarnAfterCoffeeMachineDefectFound()
+  const callProgrammersForCoffee = new CallProgrammersForCoffee()
   EventStore.registerSubscription({
     domainEventName: CoffeeMachineStartedPreparation.name,
     subscription: playEpicSaxGuyMusicAfterCoffeeMachineStartedWork
@@ -33,6 +37,10 @@ const makeSut = (): SutTypes => {
     domainEventName: CoffeeMachineDefectFound.name,
     subscription: warnAfterCoffeeMachineDefectFound
   })
+  EventStore.registerSubscription({
+    domainEventName: CoffeeBreak.name,
+    subscription: callProgrammersForCoffee
+  })
   const coffeeMachine = CoffeeMachine.create({
     name: 'Super Coffee Machine',
     coffeeGrams: 500,
@@ -42,7 +50,8 @@ const makeSut = (): SutTypes => {
     coffeeMachine,
     sendSmsAfterDeliciousCoffeeFinished,
     warnAfterCoffeeMachineDefectFound,
-    playEpicSaxGuyMusicAfterCoffeeMachineStartedWork
+    playEpicSaxGuyMusicAfterCoffeeMachineStartedWork,
+    callProgrammersForCoffee
   }
 }
 
@@ -55,7 +64,7 @@ describe(EventStore, () => {
     expect(coffeeMachineWorking.getDomainEvents()[0].dateTimeOccurred).toBeTruthy()
 
     const coffeeMachineWithDeliciousCoffee = coffeeMachineWorking.finish()
-    expect(coffeeMachineWithDeliciousCoffee.getDomainEvents().length).toBe(1)
+    expect(coffeeMachineWithDeliciousCoffee.getDomainEvents().length).toBe(2)
     expect(coffeeMachineWithDeliciousCoffee.getDomainEvents()[0].dateTimeOccurred).toBeTruthy()
   })
 
@@ -65,7 +74,8 @@ describe(EventStore, () => {
         coffeeMachine,
         warnAfterCoffeeMachineDefectFound,
         sendSmsAfterDeliciousCoffeeFinished,
-        playEpicSaxGuyMusicAfterCoffeeMachineStartedWork
+        playEpicSaxGuyMusicAfterCoffeeMachineStartedWork,
+        callProgrammersForCoffee
       } = makeSut()
 
       const coffeeMachineWorking = coffeeMachine.start()
@@ -78,14 +88,27 @@ describe(EventStore, () => {
       )
       const sendSmsOccurredSpy = jest.spyOn(sendSmsAfterDeliciousCoffeeFinished, 'occurred')
       const warnOccurredSpy = jest.spyOn(warnAfterCoffeeMachineDefectFound, 'occurred')
+      const callProgrammersForCoffeeSpy = jest.spyOn(
+        callProgrammersForCoffee,
+        'occurred'
+      )
 
       await EventStore.dispatchEventsForAggregate(coffeeMachine.getIdentifier())
 
+      expect(playMusicOccurredSpy).toHaveBeenCalledTimes(1)
       expect(playMusicOccurredSpy).toHaveBeenCalledWith(coffeeMachineWorking.getDomainEvents()[0])
 
+      expect(sendSmsOccurredSpy).toHaveBeenCalledTimes(1)
       expect(sendSmsOccurredSpy).toHaveBeenCalledWith(
         coffeeMachineWithDeliciousCoffee.getDomainEvents()[0]
       )
+
+      expect(warnOccurredSpy).toHaveBeenCalledTimes(1)
       expect(warnOccurredSpy).toHaveBeenCalledWith(coffeeMachineBroken.getDomainEvents()[0])
+
+      expect(callProgrammersForCoffeeSpy).toHaveBeenCalledTimes(1)
+      expect(callProgrammersForCoffeeSpy).toHaveBeenCalledWith(
+        coffeeMachineWithDeliciousCoffee.getDomainEvents()[0]
+      )
     })
 })
