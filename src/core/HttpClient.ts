@@ -2,7 +2,7 @@
 import { Either } from '../railway/Either'
 import https from 'https'
 
-export type RequestParams<Data, DataName extends 'query' | 'body', H = any, Options = any> = Pick<Record<'query' | 'body', Data>, DataName> & {
+export type RequestParams<Data, DataName extends 'query' | 'body' | 'form', H = any, Options = any> = Pick<Record<'query' | 'body' | 'form', Data>, DataName> & {
   method: 'get' | 'delete' | 'post' | 'put' | 'patch'
   path: string
   header?: H
@@ -24,7 +24,7 @@ export interface Unsuccessful<D, H = any> {
 }
 
 export interface HttpClient {
-  request<SuccessfulResponse = any, UnsuccessfulResponse = any, InputData = unknown, DataName extends 'query' | 'body' | never = any, H = any, Options = any>(
+  request<SuccessfulResponse = any, UnsuccessfulResponse = any, InputData = unknown, DataName extends 'query' | 'body' | 'form' | never = any, H = any, Options = any>(
     params: RequestParams<InputData, DataName, H, Options>
   ): Promise<Either<Unsuccessful<UnsuccessfulResponse>, Successful<SuccessfulResponse>>>
 }
