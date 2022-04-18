@@ -4,7 +4,9 @@ export interface CreateJobOptions {
   delay?: number
   repeat?: {
     cron?: string
+    tz?: string
   }
+  jobId?: string
 }
 
 export interface JobData<T> {
